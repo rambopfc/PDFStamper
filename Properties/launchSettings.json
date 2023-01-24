@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PDFStamper": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\LW7-08_DocReview\\Temporary_Files\\JOSEPH.BOTTA0000108390.pdf\" \"C:\\LW7-08_DocReview\\Temporary_Files\\JOSEPH.BOTTA0000108390.output.pdf\" \"Project: Q1221-529\" 5 F \"NBP-0234 (Ver 1)\" \"Verification: USP - Identification B/Assay/Limit of Related Linear and Branched Alkyl Carboxylic Acids, Related Esters, Cyclic Esters, and Ketone Alkyl Carboxylic Acids,Alkyl Carboxylic Acids, Related Esters, Cyclic Esters, Related Esters, Cyclic Esters,\""
+    }
+  }
+}
