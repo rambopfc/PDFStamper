@@ -189,12 +189,12 @@ namespace PDFStamper
                             ).ShowText("Client: " + ClientName).EndText();
                             canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 675
                             ).ShowText("Product: " + ProductName).EndText();
-
+                            #endregion
                             break;
                         }
-                    #endregion
+                    
 
-                    #region Equipment NB Stamps
+                    
                     case "ENBC":
                         {
                             #region ArgsSetup
@@ -261,12 +261,93 @@ namespace PDFStamper
 
                             break;
                         }
-                    #endregion
+              
+
+                    case "ENB":
+                        {
+                            #region ArgsSetup
+
+                            if (string.IsNullOrWhiteSpace(args[7].ToString()))
+                            {
+                                throw new Exception("Event ID string not found!");
+                            }
+                            else
+                            {
+                                EventID = "Event: " + args[7].ToString();
+                            }
+                            if (string.IsNullOrWhiteSpace(args[8].ToString()))
+                            {
+                                throw new Exception("Equipment info not found!");
+                            }
+                            else
+                            {
+                                Equiptype = args[8].ToString();
+                            }
+
+                            if (string.IsNullOrWhiteSpace(args[9].ToString()))
+                            {
+                                throw new Exception("Location info not found!");
+                            }
+                            else
+                            {
+                                Location = "Location: " + args[9].ToString();
+                            }
+                            #endregion
+
+                            #region ENBC Stamps
+
+                            for (int i = 0; i < PDFPageCount; i++)
+                            {
+                                PdfPage page = pdfDoc.GetPage(i+1);
+                                PdfCanvas canvasWrite = new PdfCanvas(page);
+
+                                Paragraph p = new Paragraph("Instrument: " + ReportedName).SetFontSize(8);
+                                p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                p.SetRelativePosition(70, 1, 100, 100);
+                                p.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(p).Close();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 780
+                                ).ShowText(DataPacketID).EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 765
+                                ).ShowText(EventID).EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 750
+                                ).ShowText("Date:_______________").EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
+                                ).ShowText(DocID).EndText();
+                                Paragraph et = new Paragraph(Equiptype).SetFontSize(8);
+                                et.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                et.SetRelativePosition(70, 9, 100, 100);
+                                et.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(et).Close();
+                                Paragraph Loca = new Paragraph(Location).SetFontSize(8);
+                                Loca.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                Loca.SetRelativePosition(70, 17, 100, 100);
+                                Loca.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(Loca).Close();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(495, 735
+                                ).ShowText("Page Not Used").EndText();
+                                Rectangle rekt = new Rectangle(565, 730, 15, 15);
+                                canvasWrite.Rectangle(rekt);
+                                canvasWrite.Stroke();
+                                PageNumStart++;
+                                //vertical footer
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
+                                   ).ShowText(footertext + (PageNumStart)).EndText();
+
+                            }
+
+                            #endregion
+
+                            break;
+                        }
+
 
                     case "NBP":
-                        //So far nothing special goes here?
+                        {
+                            //So far nothing special goes here?
 
-                        break;
+                            break;
+                        }
                     default:
                         throw new Exception("Invalid page type!");
                         

@@ -2,7 +2,7 @@
   "profiles": {
     "PDFStamper": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:\\LW7-08_DocReview\\Temporary_Files\\JOSEPH.BOTTA0000108390.pdf\" \"C:\\LW7-08_DocReview\\Temporary_Files\\JOSEPH.BOTTA0000108390.output.pdf\" LNBC \"Q1221-529-1\" 0 \"Evaluation:Dissolution\" \"NBP-0234 (Ver 1)\" \"171276\" \"FJF\" \"(EX) Citric Acid, Anhydrous\" "
+      "commandLineArgs": "\"C:\\LW7-08_DocReview\\Temporary_Files\\JOSEPH.BOTTA0000108452.pdf\" \"C:\\LW7-08_DocReview\\Temporary_Files\\JOSEPH.BOTTA0000108452.output.pdf\" ENB \"M22111620\" 0 \"ASSET2593\" \"NBP-0234 (Ver 1)\" \"PE-12MO\" \"Agilent > G7120A - (Pump > Binary > 1290)\" \"QCL > 3220B > 116-HPLC\""
     }
   }
 }
