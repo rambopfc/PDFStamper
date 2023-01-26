@@ -40,6 +40,9 @@ namespace PDFStamper
             string DataPacketID;
             string ClientName;
             string ProductName;
+            string EventID;
+            string Equiptype;
+            string Location;
             string DocID;
             string Barcode;
             int PDFPageCount;
@@ -113,96 +116,151 @@ namespace PDFStamper
                 //Valid page types
                 //LNBC - Lab Notebook Cover Page
                 //ENBC - Equipment Notebook Cover Page
+                //ENB - Equipment Notebook Page
                 //NBP - Regular notebook page
                 switch (Pagetype)
                 {
                     case "LNBC":
-
-                        #region ArgsSetup
-                        if (string.IsNullOrWhiteSpace(args[7].ToString()))
                         {
-                            throw new Exception("Barcode string not found!");
+                            #region ArgsSetup
+                            if (string.IsNullOrWhiteSpace(args[7].ToString()))
+                            {
+                                throw new Exception("Barcode string not found!");
+                            }
+                            else
+                            {
+                                Barcode = args[7].ToString();
+                            }
+
+                            if (string.IsNullOrWhiteSpace(args[8].ToString()))
+                            {
+                                throw new Exception("Client name not found!");
+                            }
+                            else
+                            {
+                                ClientName = args[8].ToString();
+                            }
+
+                            if (string.IsNullOrWhiteSpace(args[9].ToString()))
+                            {
+                                throw new Exception("Product name not found!");
+                            }
+                            else
+                            {
+                                ProductName = args[9].ToString();
+                            }
+                            #endregion
+
+                            #region LNBC Stamps
+                            PdfCanvas canvasWrite = new PdfCanvas(pdfDoc.GetFirstPage());
+                            PdfPage page = pdfDoc.GetFirstPage();
+
+                            Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
+                            p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                            p.SetRelativePosition(125, 8, 100, 100);
+                            p.SetMaxWidth(325);
+                            new Canvas(page, page.GetPageSize()).Add(p).Close();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 770
+                            ).ShowText(DataPacketID).EndText();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 755
+                            ).ShowText("Date:_______________").EndText();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
+                            ).ShowText(DocID).EndText();
+
+                            //vertical footer
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
+                               ).ShowText(footertext + (PageNumStart + 1)).EndText();
+
+
+                            Paragraph title = new Paragraph("Laboratory Notebook Cover Page").SetFontSize(15);
+                            title.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                            title.SetRelativePosition(190, 40, 100, 100);
+                            title.SetMaxWidth(250);
+                            new Canvas(page, page.GetPageSize()).Add(title).Close();
+
+                            Barcode128 barcode128 = new Barcode128(pdfDoc);
+                            barcode128.SetCodeType(Barcode128.CODE_C);
+                            barcode128.SetCode(Barcode);
+                            barcode128.SetBarHeight(15);
+                            PdfFormXObject barcodeimg = barcode128.CreateFormXObject(ColorConstants.BLACK, ColorConstants.BLACK, pdfDoc);
+                            canvasWrite.AddXObjectAt(barcodeimg, 275, 700);
+
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 695
+                            ).ShowText("Client: " + ClientName).EndText();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 675
+                            ).ShowText("Product: " + ProductName).EndText();
+
+                            break;
                         }
-                        else
-                        {
-                            Barcode = args[7].ToString();
-                        }
-
-                        if (string.IsNullOrWhiteSpace(args[8].ToString()))
-                        {
-                            throw new Exception("Client name not found!");
-                        }
-                        else
-                        {
-                            ClientName = args[8].ToString();
-                        }
-
-                        if (string.IsNullOrWhiteSpace(args[9].ToString()))
-                        {
-                            throw new Exception("Product name not found!");
-                        }
-                        else
-                        {
-                            ProductName = args[9].ToString();
-                        }
-                        #endregion
-
-                        #region LNBC Stamps
-                        PdfCanvas canvasWrite = new PdfCanvas(pdfDoc.GetFirstPage());
-                        PdfPage page = pdfDoc.GetFirstPage();
-
-                        Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
-                        p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                        p.SetRelativePosition(125, 8, 100, 100);
-                        p.SetMaxWidth(325);
-                        new Canvas(page, page.GetPageSize()).Add(p).Close();
-                        canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 770
-                        ).ShowText(DataPacketID).EndText();
-                        canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 755
-                        ).ShowText("Date:_______________").EndText();
-                        canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
-                        ).ShowText(DocID).EndText();
-
-                        //vertical footer
-                        canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
-                           ).ShowText(footertext + (PageNumStart + 1)).EndText();
-
-
-                        Paragraph title = new Paragraph("Laboratory Notebook Cover Page").SetFontSize(15);
-                        title.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                        title.SetRelativePosition(190,40,100,100);
-                        title.SetMaxWidth(250);
-                        new Canvas(page, page.GetPageSize()).Add(title).Close();
-
-                        Barcode128 barcode128 = new Barcode128(pdfDoc);
-                        barcode128.SetCodeType(Barcode128.CODE_C);
-                        barcode128.SetCode(Barcode);
-                        barcode128.SetBarHeight(15);
-                        PdfFormXObject barcodeimg = barcode128.CreateFormXObject(ColorConstants.BLACK, ColorConstants.BLACK, pdfDoc);
-                        canvasWrite.AddXObjectAt(barcodeimg, 275, 700);
-
-                        canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 695
-                        ).ShowText("Client: " + ClientName).EndText();
-                        canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 675
-                        ).ShowText("Product: " + ProductName).EndText();
-
-                        break;
                     #endregion
 
                     #region Equipment NB Stamps
                     case "ENBC":
-
-                        if (string.IsNullOrWhiteSpace(args[7].ToString()))
                         {
-                            throw new Exception("Barcode string not found!");
-                        }
-                        else
-                        {
-                            Barcode = args[7].ToString();
-                        }
-                        //Add other Equipment NB stuff here
+                            #region ArgsSetup
 
-                        break;
+                            if (string.IsNullOrWhiteSpace(args[7].ToString()))
+                            {
+                                throw new Exception("Event ID string not found!");
+                            }
+                            else
+                            {
+                                EventID = "Event: " + args[7].ToString();
+                            }
+                            if (string.IsNullOrWhiteSpace(args[8].ToString()))
+                            {
+                                throw new Exception("Equipment info not found!");
+                            }
+                            else
+                            {
+                                Equiptype = args[8].ToString();
+                            }
+
+                            if (string.IsNullOrWhiteSpace(args[9].ToString()))
+                            {
+                                throw new Exception("Location info not found!");
+                            }
+                            else
+                            {
+                                Location = "Location: " + args[9].ToString();
+                            }
+                            #endregion
+
+                            #region ENBC Stamps
+                            PdfCanvas canvasWrite = new PdfCanvas(pdfDoc.GetFirstPage());
+                            PdfPage page = pdfDoc.GetFirstPage();
+
+                            Paragraph p = new Paragraph("Instrument: " + ReportedName).SetFontSize(8);
+                            p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                            p.SetRelativePosition(70, 1, 100, 100);
+                            p.SetMaxWidth(325);
+                            new Canvas(page, page.GetPageSize()).Add(p).Close();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 780
+                            ).ShowText(DataPacketID).EndText();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 765
+                            ).ShowText(EventID).EndText();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 750
+                            ).ShowText("Date:_______________").EndText();
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
+                            ).ShowText(DocID).EndText();
+                            Paragraph et = new Paragraph(Equiptype).SetFontSize(8);
+                            et.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                            et.SetRelativePosition(70, 9, 100, 100);
+                            et.SetMaxWidth(325);
+                            new Canvas(page, page.GetPageSize()).Add(et).Close();
+                            Paragraph Loca = new Paragraph(Location).SetFontSize(8);
+                            Loca.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                            Loca.SetRelativePosition(70, 17, 100, 100);
+                            Loca.SetMaxWidth(325);
+                            new Canvas(page, page.GetPageSize()).Add(Loca).Close();
+                            //vertical footer
+                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
+                               ).ShowText(footertext + (PageNumStart + 1)).EndText();
+
+                            #endregion
+
+                            break;
+                        }
                     #endregion
 
                     case "NBP":
