@@ -21,7 +21,7 @@ namespace PDFStamper
         {
             #region ArgsCheck
             //Program was run with no / not enough input. Show help menu.
-            if (args.Length == 0 || args.Length < 7)
+            if ((args.Length == 0 || args.Length < 7) && (args[2].ToString() != "NBP"))
             {
                 Intro();
                 return 0;
@@ -42,7 +42,7 @@ namespace PDFStamper
             string ProductName;
             string EventID;
             string Equiptype;
-            string Location;
+            string Category;
             string DocID;
             string Barcode;
             int PDFPageCount;
@@ -152,45 +152,53 @@ namespace PDFStamper
                             #endregion
 
                             #region LNBC Stamps
-                            PdfCanvas canvasWrite = new PdfCanvas(pdfDoc.GetFirstPage());
-                            PdfPage page = pdfDoc.GetFirstPage();
 
-                            Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
-                            p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                            p.SetRelativePosition(125, 8, 100, 100);
-                            p.SetMaxWidth(325);
-                            new Canvas(page, page.GetPageSize()).Add(p).Close();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 770
-                            ).ShowText(DataPacketID).EndText();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 755
-                            ).ShowText("Date:_______________").EndText();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
-                            ).ShowText(DocID).EndText();
-
-                            //vertical footer
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
-                               ).ShowText(footertext + (PageNumStart + 1)).EndText();
+                            for (int i = 0; i < PDFPageCount; i++)
+                            {
 
 
-                            Paragraph title = new Paragraph("Laboratory Notebook Cover Page").SetFontSize(15);
-                            title.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                            title.SetRelativePosition(190, 40, 100, 100);
-                            title.SetMaxWidth(250);
-                            new Canvas(page, page.GetPageSize()).Add(title).Close();
+                                PdfPage page = pdfDoc.GetPage(i + 1);
+                                PdfCanvas canvasWrite = new PdfCanvas(page);
 
-                            Barcode128 barcode128 = new Barcode128(pdfDoc);
-                            barcode128.SetCodeType(Barcode128.CODE_C);
-                            barcode128.SetCode(Barcode);
-                            barcode128.SetBarHeight(15);
-                            PdfFormXObject barcodeimg = barcode128.CreateFormXObject(ColorConstants.BLACK, ColorConstants.BLACK, pdfDoc);
-                            canvasWrite.AddXObjectAt(barcodeimg, 275, 700);
+                                Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
+                                p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                p.SetRelativePosition(125, 8, 100, 100);
+                                p.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(p).Close();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 770
+                                ).ShowText(DataPacketID).EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 755
+                                ).ShowText("Date:_______________").EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
+                                ).ShowText(DocID).EndText();
+                                PageNumStart++;
+                                //vertical footer
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
+                                   ).ShowText(footertext + (PageNumStart)).EndText();
 
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 695
-                            ).ShowText("Client: " + ClientName).EndText();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 675
-                            ).ShowText("Product: " + ProductName).EndText();
+
+                                Paragraph title = new Paragraph("Laboratory Notebook Cover Page").SetFontSize(15);
+                                title.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                title.SetRelativePosition(190, 40, 100, 100);
+                                title.SetMaxWidth(250);
+                                new Canvas(page, page.GetPageSize()).Add(title).Close();
+
+                                Barcode128 barcode128 = new Barcode128(pdfDoc);
+                                barcode128.SetCodeType(Barcode128.CODE_C);
+                                barcode128.SetCode(Barcode);
+                                barcode128.SetBarHeight(15);
+                                PdfFormXObject barcodeimg = barcode128.CreateFormXObject(ColorConstants.BLACK, ColorConstants.BLACK, pdfDoc);
+                                canvasWrite.AddXObjectAt(barcodeimg, 275, 700);
+
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 695
+                                ).ShowText("Client: " + ClientName).EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 675
+                                ).ShowText("Product: " + ProductName).EndText();
+                                
+                            }
                             #endregion
                             break;
+
                         }
                     
 
@@ -218,45 +226,50 @@ namespace PDFStamper
 
                             if (string.IsNullOrWhiteSpace(args[9].ToString()))
                             {
-                                throw new Exception("Location info not found!");
+                                throw new Exception("Category info not found!");
                             }
                             else
                             {
-                                Location = "Location: " + args[9].ToString();
+                                Category = "Category: " + args[9].ToString();
                             }
                             #endregion
 
+
                             #region ENBC Stamps
-                            PdfCanvas canvasWrite = new PdfCanvas(pdfDoc.GetFirstPage());
-                            PdfPage page = pdfDoc.GetFirstPage();
 
-                            Paragraph p = new Paragraph("Instrument: " + ReportedName).SetFontSize(8);
-                            p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                            p.SetRelativePosition(70, 1, 100, 100);
-                            p.SetMaxWidth(325);
-                            new Canvas(page, page.GetPageSize()).Add(p).Close();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 780
-                            ).ShowText(DataPacketID).EndText();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 765
-                            ).ShowText(EventID).EndText();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 750
-                            ).ShowText("Date:_______________").EndText();
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
-                            ).ShowText(DocID).EndText();
-                            Paragraph et = new Paragraph(Equiptype).SetFontSize(8);
-                            et.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                            et.SetRelativePosition(70, 9, 100, 100);
-                            et.SetMaxWidth(325);
-                            new Canvas(page, page.GetPageSize()).Add(et).Close();
-                            Paragraph Loca = new Paragraph(Location).SetFontSize(8);
-                            Loca.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                            Loca.SetRelativePosition(70, 17, 100, 100);
-                            Loca.SetMaxWidth(325);
-                            new Canvas(page, page.GetPageSize()).Add(Loca).Close();
-                            //vertical footer
-                            canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
-                               ).ShowText(footertext + (PageNumStart + 1)).EndText();
+                            for (int i = 0; i < PDFPageCount; i++)
+                            {
+                                PdfPage page = pdfDoc.GetPage(i + 1);
+                                PdfCanvas canvasWrite = new PdfCanvas(page);
 
+                                Paragraph p = new Paragraph("Instrument: " + ReportedName).SetFontSize(8);
+                                p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                p.SetRelativePosition(70, 1, 100, 100);
+                                p.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(p).Close();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 780
+                                ).ShowText(DataPacketID).EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 765
+                                ).ShowText(EventID).EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 750
+                                ).ShowText("Date:_______________").EndText();
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
+                                ).ShowText(DocID).EndText();
+                                Paragraph et = new Paragraph(Equiptype).SetFontSize(8);
+                                et.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                et.SetRelativePosition(70, 9, 100, 100);
+                                et.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(et).Close();
+                                Paragraph Cata = new Paragraph(Category).SetFontSize(8);
+                                Cata.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                Cata.SetRelativePosition(70, 17, 100, 100);
+                                Cata.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(Cata).Close();
+                                PageNumStart++;
+                                //vertical footer
+                                canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
+                                   ).ShowText(footertext + (PageNumStart)).EndText();
+                            }
                             #endregion
 
                             break;
@@ -286,11 +299,11 @@ namespace PDFStamper
 
                             if (string.IsNullOrWhiteSpace(args[9].ToString()))
                             {
-                                throw new Exception("Location info not found!");
+                                throw new Exception("Category info not found!");
                             }
                             else
                             {
-                                Location = "Location: " + args[9].ToString();
+                                Category = "Category: " + args[9].ToString();
                             }
                             #endregion
 
@@ -319,11 +332,11 @@ namespace PDFStamper
                                 et.SetRelativePosition(70, 9, 100, 100);
                                 et.SetMaxWidth(325);
                                 new Canvas(page, page.GetPageSize()).Add(et).Close();
-                                Paragraph Loca = new Paragraph(Location).SetFontSize(8);
-                                Loca.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                                Loca.SetRelativePosition(70, 17, 100, 100);
-                                Loca.SetMaxWidth(325);
-                                new Canvas(page, page.GetPageSize()).Add(Loca).Close();
+                                Paragraph Cata = new Paragraph(Category).SetFontSize(8);
+                                Cata.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                Cata.SetRelativePosition(70, 17, 100, 100);
+                                Cata.SetMaxWidth(325);
+                                new Canvas(page, page.GetPageSize()).Add(Cata).Close();
                                 canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(495, 735
                                 ).ShowText("Page Not Used").EndText();
                                 Rectangle rekt = new Rectangle(565, 730, 15, 15);
@@ -344,7 +357,102 @@ namespace PDFStamper
 
                     case "NBP":
                         {
-                            //So far nothing special goes here?
+                            #region NBP Stamps
+
+
+                            for (int i = 0; i < PDFPageCount; i++)
+                            {
+
+
+                                PdfPage page = pdfDoc.GetPage(i + 1);
+                                PdfCanvas canvasWrite = new PdfCanvas(page);
+                                Rectangle stuff = page.GetPageSizeWithRotation();
+                                if (stuff.GetHeight() >= stuff.GetWidth())
+                                {
+                                    IsHorizontal = false;
+                                }
+                                else
+                                {
+                                    IsHorizontal = true;
+                                }
+                                
+
+                                PageNumStart++;
+                                if (IsHorizontal)
+                                {
+                                    Paragraph pnu = new Paragraph("Page Not Used").SetFontSize(10);
+                                    pnu.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    pnu.SetFixedPosition(650, 595, 1000);
+                                    new Canvas(page, page.GetPageSize()).Add(pnu).Close();
+                                    Rectangle rekt = new Rectangle(725, 595, 15, 15);
+
+                                    canvasWrite.Rectangle(rekt);
+                                    canvasWrite.Stroke();
+
+                                    Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
+                                    p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    p.SetRelativePosition(770, 40, 100, 100);
+                                    p.SetRotationAngle(-146.087);
+                                    p.SetMaxWidth(325);
+                                    new Canvas(page, page.GetPageSize()).Add(p).Close();
+
+                                    Paragraph hdocid = new Paragraph(DocID).SetFontSize(6);
+                                    hdocid.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    hdocid.SetFixedPosition(775, 610, 1000);
+                                    hdocid.SetRotationAngle(-146.087);
+                                    p.SetMaxWidth(300);
+                                    new Canvas(page, page.GetPageSize()).Add(hdocid).Close();
+
+                                    Paragraph hdatapacket = new Paragraph(DataPacketID).SetFontSize(10);
+                                    hdatapacket.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    hdatapacket.SetFixedPosition(770, 80, 1000);
+                                    hdatapacket.SetRotationAngle(-146.087);
+                                    p.SetMaxWidth(300);
+                                    new Canvas(page, page.GetPageSize()).Add(hdatapacket).Close();
+
+                                    Paragraph hdate = new Paragraph("Date:__________").SetFontSize(10);
+                                    hdate.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    hdate.SetFixedPosition(750, 90, 1000);
+                                    hdate.SetRotationAngle(-146.087);
+                                    p.SetMaxWidth(300);
+                                    new Canvas(page, page.GetPageSize()).Add(hdate).Close();
+
+                                    Paragraph hfoot = new Paragraph(footertext + PageNumStart).SetFontSize(10);
+                                    hfoot.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    hfoot.SetRotationAngle(-146.087);
+                                    hfoot.SetFixedPosition(4, 600, 1000);
+                                    new Canvas(page, page.GetPageSize()).Add(hfoot).Close();
+                                }
+                                else //vertical stuff
+                                {
+                                    Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
+                                    p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    p.SetRelativePosition(125, 8, 100, 100);
+                                    p.SetMaxWidth(325);
+
+                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 770
+                                    ).ShowText(DataPacketID).EndText();
+                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
+                                    ).ShowText(footertext + (PageNumStart)).EndText();
+                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(495, 735
+                                    ).ShowText("Page Not Used").EndText();
+                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 755
+                                    ).ShowText("Date:_______________").EndText();
+                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
+                                    ).ShowText(DocID).EndText();
+
+                                    Rectangle rekt = new Rectangle(565, 730, 15, 15);
+                                    canvasWrite.Rectangle(rekt);
+                                    canvasWrite.Stroke();
+                                }
+
+
+
+
+
+
+                            }
+                            #endregion
 
                             break;
                         }
