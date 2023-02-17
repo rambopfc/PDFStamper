@@ -194,6 +194,17 @@ namespace PDFStamper
                                 ).ShowText("Client: " + ClientName).EndText();
                                 canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 675
                                 ).ShowText("Product: " + ProductName).EndText();
+
+                                if (DataPacketID == "QDEMO-DE-MO")
+                                {
+                                    Paragraph d = new Paragraph("DEMO - Not for production use").SetFontSize(30);
+                                    d.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    //d.SetRelativePosition(220, 150, 100, 100);
+                                    d.SetFixedPosition(150, 400, 1000);
+                                    //d.SetMaxWidth(525);
+                                    d.SetRotationAngle(145);
+                                    new Canvas(page, page.GetPageSize()).Add(d).Close();
+                                }
                                 
                             }
                             #endregion
@@ -269,6 +280,18 @@ namespace PDFStamper
                                 //vertical footer
                                 canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
                                    ).ShowText(footertext + (PageNumStart)).EndText();
+
+                                if (DataPacketID == "M1111DEMO")
+                                {
+                                    Paragraph d = new Paragraph("DEMO - Not for production use").SetFontSize(30);
+                                    d.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    //d.SetRelativePosition(220, 150, 100, 100);
+                                    d.SetFixedPosition(150, 350, 1000);
+                                    //d.SetMaxWidth(525);
+                                    d.SetRotationAngle(145);
+                                    new Canvas(page, page.GetPageSize()).Add(d).Close();
+                                }
+
                             }
                             #endregion
 
@@ -347,7 +370,18 @@ namespace PDFStamper
                                 canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
                                    ).ShowText(footertext + (PageNumStart)).EndText();
 
+                                if (DataPacketID == "M1111DEMO")
+                                {
+                                    Paragraph d = new Paragraph("DEMO - Not for production use").SetFontSize(30);
+                                    d.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    //d.SetRelativePosition(220, 150, 100, 100);
+                                    d.SetFixedPosition(150, 400, 1000);
+                                    //d.SetMaxWidth(525);
+                                    d.SetRotationAngle(145);
+                                    new Canvas(page, page.GetPageSize()).Add(d).Close();
+                                }
                             }
+
 
                             #endregion
 
@@ -391,7 +425,8 @@ namespace PDFStamper
 
                                     Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
                                     p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                                    p.SetRelativePosition(770, 40, 100, 100);
+                                    //p.SetRelativePosition(770,60, 100, 100);
+                                    p.SetFixedPosition(770, 500, 1000);
                                     p.SetRotationAngle(-146.087);
                                     p.SetMaxWidth(325);
                                     new Canvas(page, page.GetPageSize()).Add(p).Close();
@@ -405,7 +440,7 @@ namespace PDFStamper
 
                                     Paragraph hdatapacket = new Paragraph(DataPacketID).SetFontSize(10);
                                     hdatapacket.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                                    hdatapacket.SetFixedPosition(770, 80, 1000);
+                                    hdatapacket.SetFixedPosition(770, 90, 1000);
                                     hdatapacket.SetRotationAngle(-146.087);
                                     p.SetMaxWidth(300);
                                     new Canvas(page, page.GetPageSize()).Add(hdatapacket).Close();
@@ -429,6 +464,7 @@ namespace PDFStamper
                                     p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
                                     p.SetRelativePosition(125, 8, 100, 100);
                                     p.SetMaxWidth(325);
+                                    new Canvas(page, page.GetPageSize()).Add(p).Close();
 
                                     canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 770
                                     ).ShowText(DataPacketID).EndText();
@@ -446,7 +482,16 @@ namespace PDFStamper
                                     canvasWrite.Stroke();
                                 }
 
-
+                                if (DataPacketID == "QDEMO-DE-MO")
+                                {
+                                    Paragraph d = new Paragraph("DEMO - Not for production use").SetFontSize(30);
+                                    d.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
+                                    //d.SetRelativePosition(220, 150, 100, 100);
+                                    d.SetFixedPosition(150, 350, 1000);
+                                    //d.SetMaxWidth(525);
+                                    d.SetRotationAngle(145);
+                                    new Canvas(page, page.GetPageSize()).Add(d).Close();
+                                }
 
 
 
