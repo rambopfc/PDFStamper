@@ -416,9 +416,9 @@ namespace PDFStamper
                                 {
                                     Paragraph pnu = new Paragraph("Page Not Used").SetFontSize(10);
                                     pnu.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                                    pnu.SetFixedPosition(650, 595, 1000);
+                                    pnu.SetFixedPosition(650, 585, 1000);
                                     new Canvas(page, page.GetPageSize()).Add(pnu).Close();
-                                    Rectangle rekt = new Rectangle(725, 595, 15, 15);
+                                    Rectangle rekt = new Rectangle(725, 585, 15, 15);
 
                                     canvasWrite.Rectangle(rekt);
                                     canvasWrite.Stroke();
@@ -426,28 +426,28 @@ namespace PDFStamper
                                     Paragraph p = new Paragraph(ReportedName).SetFontSize(10);
                                     p.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
                                     //p.SetRelativePosition(770,60, 100, 100);
-                                    p.SetFixedPosition(770, 500, 1000);
+                                    p.SetFixedPosition(760, 500, 1000);
                                     p.SetRotationAngle(-146.087);
                                     p.SetMaxWidth(325);
                                     new Canvas(page, page.GetPageSize()).Add(p).Close();
 
                                     Paragraph hdocid = new Paragraph(DocID).SetFontSize(6);
                                     hdocid.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                                    hdocid.SetFixedPosition(775, 610, 1000);
+                                    hdocid.SetFixedPosition(760, 585, 1000);
                                     hdocid.SetRotationAngle(-146.087);
                                     p.SetMaxWidth(300);
                                     new Canvas(page, page.GetPageSize()).Add(hdocid).Close();
 
                                     Paragraph hdatapacket = new Paragraph(DataPacketID).SetFontSize(10);
                                     hdatapacket.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                                    hdatapacket.SetFixedPosition(770, 90, 1000);
+                                    hdatapacket.SetFixedPosition(760, 125, 1000);
                                     hdatapacket.SetRotationAngle(-146.087);
                                     p.SetMaxWidth(300);
                                     new Canvas(page, page.GetPageSize()).Add(hdatapacket).Close();
 
-                                    Paragraph hdate = new Paragraph("Date:__________").SetFontSize(10);
+                                    Paragraph hdate = new Paragraph("Date:____________").SetFontSize(10);
                                     hdate.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
-                                    hdate.SetFixedPosition(750, 90, 1000);
+                                    hdate.SetFixedPosition(745, 125, 1000);
                                     hdate.SetRotationAngle(-146.087);
                                     p.SetMaxWidth(300);
                                     new Canvas(page, page.GetPageSize()).Add(hdate).Close();
@@ -455,7 +455,7 @@ namespace PDFStamper
                                     Paragraph hfoot = new Paragraph(footertext + PageNumStart).SetFontSize(10);
                                     hfoot.SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA));
                                     hfoot.SetRotationAngle(-146.087);
-                                    hfoot.SetFixedPosition(4, 600, 1000);
+                                    hfoot.SetFixedPosition(6, 600, 1000);
                                     new Canvas(page, page.GetPageSize()).Add(hfoot).Close();
                                 }
                                 else //vertical stuff
@@ -468,13 +468,13 @@ namespace PDFStamper
 
                                     canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 770
                                     ).ShowText(DataPacketID).EndText();
-                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(10, 15
+                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(14, 15
                                     ).ShowText(footertext + (PageNumStart)).EndText();
                                     canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(495, 735
                                     ).ShowText("Page Not Used").EndText();
                                     canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10).MoveText(475, 755
                                     ).ShowText("Date:_______________").EndText();
-                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(10, 775
+                                    canvasWrite.BeginText().SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 6).MoveText(14, 775
                                     ).ShowText(DocID).EndText();
 
                                     Rectangle rekt = new Rectangle(565, 730, 15, 15);
