@@ -775,6 +775,7 @@ namespace PDFStamper
 
 
                 pdfDoc.Close();
+
                 return 1;
             }
             catch (System.IndexOutOfRangeException) 
